@@ -28,7 +28,7 @@ variable "internal_networks" {
 }
 
 variable "ami_id" {
-  default = "ami-08f3d892de259504d"
+  description = "Defines the AMI id used to launch EC2 instances"
 }
 
 data "aws_subnet" "public" {

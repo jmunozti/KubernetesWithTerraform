@@ -19,20 +19,22 @@ module "bastion" {
   ssh_key           = var.ssh_key
   internal_networks = [var.private_subnet_cidr]
   environment       = var.environment
+  ami_id            = data.aws_ami.ubuntu.id
 }
 
 module "asg" {
-  source              = "../modules/asg"
-  vpc_id              = module.vpc.vpc_id
-  ami_id              = data.aws_ami.amazon-linux-2.id
-  instance_type       = var.instance_type
-  ssh_key             = var.ssh_key
-  min_size            = var.min_size
-  max_size            = var.max_size
-  vpc_zone_identifier = module.vpc.private_subnet_id
-  health_check_type   = var.health_check_type
-  internal_networks   = [var.private_subnet_cidr]
-  environment         = var.environment
+  source                      = "../modules/asg"
+  vpc_id                      = module.vpc.vpc_id
+  ami_id                      = data.aws_ami.ubuntu.id
+  instance_type               = var.instance_type
+  ssh_key                     = var.ssh_key
+  min_size                    = var.min_size
+  max_size                    = var.max_size
+  vpc_zone_identifier         = module.vpc.public_subnet_id
+  health_check_type           = var.health_check_type
+  internal_networks           = [var.private_subnet_cidr]
+  environment                 = var.environment
+  associate_public_ip_address = var.associate_public_ip_address
 }
 
 terraform {

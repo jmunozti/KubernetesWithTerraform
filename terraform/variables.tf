@@ -56,13 +56,18 @@ variable "environment" {
   default = "The Environment name to use."
 }
 
-data "aws_ami" "amazon-linux-2" {
+data "aws_ami" "ubuntu" {
   most_recent = true
 
-  owners = ["amazon"]
+  owners = ["099720109477"]
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-hvm*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
   }
+}
+
+variable "associate_public_ip_address" {
+  description = "Defines if an EC2 Instance must to have a Public Ip"
+  default     = true
 }

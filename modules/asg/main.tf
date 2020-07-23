@@ -1,35 +1,35 @@
 resource "aws_launch_configuration" "asg-launch-config" {
-  image_id             = var.ami_id
-  instance_type        = var.instance_type
-  security_groups      = [aws_security_group.asg.id]
-  key_name             = var.ssh_key
-  iam_instance_profile = "arn:aws:iam::005488327456:instance-profile/EC2"
+  image_id                    = var.ami_id
+  instance_type               = var.instance_type
+  security_groups             = [aws_security_group.asg.id]
+  key_name                    = var.ssh_key
+  iam_instance_profile        = "arn:aws:iam::005488327456:instance-profile/EC2"
+  associate_public_ip_address = var.associate_public_ip_address
 
   user_data = <<EOF
 #!/bin/bash
-sudo yum update -y
+sudo apt-get update
+sudo apt-get install -y apt-transport-https
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg |sudo apt-key add -
+sudo touch /etc/apt/sources.list.d/kubernetes.list
+sudo sh -c ' echo deb http://apt.kubernetes.io/ kubernetes-xenial main >> /etc/apt/sources.list.d/kubernetes.list'
+sudo sh -c ' echo deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable >> /etc/apt/sources.list.d/kubernetes.list'
+sudo apt-get update && sudo apt-get install -y docker-ce --allow-unauthenticated
+sudo usermod -aG docker ubuntu
+sudo apt-get remove cri-tools
+sudo systemctl stop docker
+sudo modprobe overlay
+sudo sh -c 'echo {\"storage-driver\": \"overlay2\"} > /etc/docker/daemon.json'
+sudo rm -rf /var/lib/docker/*
+sudo systemctl start docker
 
-#Installing docker
-sudo amazon-linux-extras install docker
-sudo yum install docker
-sudo service docker start
-sudo usermod -a -G docker ec2-user
-
-sudo swapoff -a
-sudo sed -i '2s/^/#/' /etc/fstab
-
-curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
-
-#Sending /var/log/messages to CloudWatch because it records a variety of events,
-#such as the system error messages, system startups and shutdowns, change in the network configuration, etc.
-sudo yum install -y awslogs
-sudo systemctl start awslogsd
-sudo systemctl enable awslogsd.service
-
-logger $(uname -a)
-logger $(kubectl version --short --client)
+# Install kubernetes components!
+sudo apt-get install -y \
+        kubelet \
+        kubeadm \
+        kubernetes-cni \
+        --allow-downgrades --allow-unauthenticated
 EOF
 
   lifecycle {

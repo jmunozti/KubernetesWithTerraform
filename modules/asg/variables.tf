@@ -26,11 +26,12 @@ variable "max_size" {
 }
 
 variable "vpc_zone_identifier" {
-  default = "List of subnet IDs to use."
+  description = "List of subnet IDs to use."
 }
 
 variable "health_check_type" {
-  default = "EC2"
+  description = "EC2 instances health check type to use (EC2 or ELB)"
+  default     = "EC2"
 }
 
 variable "allowed_hosts" {
@@ -45,5 +46,10 @@ variable "internal_networks" {
 }
 
 variable "environment" {
-  default = "The Environment name to use."
+  description = "The Environment name to use."
+}
+
+variable "associate_public_ip_address" {
+  description = "Defines if an EC2 Instance must to have a Public Ip"
+  default     = true
 }
