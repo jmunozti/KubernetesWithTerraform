@@ -33,14 +33,20 @@ RUN apt update && \
     mkdir /devops/modules && \
     mkdir /devops/terraform && \
     mkdir /devops/docs && \
+    mkdir /devops/app && \
+    mkdir /devops/mychart && \
+    mkdir /devops/shell_script && \
     curl -Lo /devops/terraform-docs https://github.com/terraform-docs/terraform-docs/releases/download/v0.10.0-rc.1/terraform-docs-v0.10.0-rc.1-$(uname | tr '[:upper:]' '[:lower:]')-amd64 && \
     chmod +x /devops/terraform-docs
 
 # Define working directory.
 WORKDIR /devops/terraform
 COPY modules /devops/modules
-COPY terraform/ /devops/terraform
-COPY terraform/run_terraform.sh/ /devops/terraform
+COPY terraform /devops/terraform
+COPY terraform/run_terraform.sh /devops/terraform
+COPY app /devops/app
+COPY mychart /devops/mychart
+COPY shell_script /devops/shell_script
 
 # Define default command.
 CMD ["bash"]
