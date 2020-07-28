@@ -48,7 +48,6 @@ resource "aws_security_group_rule" "kubelet_api" {
   security_group_id = aws_security_group.asg.id
 }
 
-
 resource "aws_security_group_rule" "internet" {
   protocol          = "-1"
   from_port         = 0

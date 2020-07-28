@@ -20,5 +20,9 @@ for i in $(ls /devops/modules); do
 	 /devops/terraform-docs markdown /devops/modules/$i > /devops/docs/$i.md
 done;
 
+sleep 5
+#Deploy Kubernetes
+sh run_kubernetes.sh
+
 echo "============================================"
 echo "End"

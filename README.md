@@ -13,7 +13,9 @@ https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec
 
 ## Usage
 
-1.- Run this command:
+1.- Save the private key created in requirement 2 inside the keyPair folder. Must be called keyPair.pem
+
+2.- Run this command:
 
 docker build \
 -t kubernetes-with-terraform \
@@ -27,19 +29,27 @@ docker run -it --rm kubernetes-with-terraform
 
 A docker container will be created and a bash shell is ready to go.
 
-2.- Run this command:
+3.- Run this command:
 
-./run_terraform.sh
+./run.sh
 
-3.- Enjoy!
+When you log into an EC2 instances for the first time you have to add an SSH fingerprint to your known_hosts file. If you see some messages like this:
 
-4.- When you finish your reviews, run:
+"The authenticity of host 'ec2-XX-XXX-XXX-XX.compute-1.amazonaws.com (XX.XXX.XXX.XX)' can't be established.
+ECDSA key fingerprint is SHA256:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.
+Are you sure you want to continue connecting (yes/no)"
+
+Please answer yes.
+
+4.- Enjoy!
+
+5.- When you finish your reviews, run:
 
 terraform destroy
 
 to eliminate all created infraestructure in this demo.
 
-5.- Run this command:
+6.- Run this command:
 
 exit
 
