@@ -63,11 +63,16 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
   }
 }
 
 variable "associate_public_ip_address" {
   description = "Defines if an EC2 Instance must to have a Public Ip"
   default     = true
+}
+
+variable "master_count" {
+  description = "Defines the number of Kubernetes' Mater nodes"
+  default     = "1"
 }

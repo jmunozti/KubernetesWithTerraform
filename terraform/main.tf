@@ -22,6 +22,19 @@ module "bastion" {
   ami_id            = data.aws_ami.ubuntu.id
 }
 
+#Kubernetes' Master
+module "ec2" {
+  source        = "../modules/ec2"
+  vpc_id        = module.vpc.vpc_id
+  ami_id        = data.aws_ami.ubuntu.id
+  ssh_key       = var.ssh_key
+  ec2_count     = var.master_count
+  instance_type = var.instance_type
+  subnet_id     = module.vpc.public_subnet_id
+  environment   = var.environment
+}
+
+#Kubernetes' Workers
 module "asg" {
   source                      = "../modules/asg"
   vpc_id                      = module.vpc.vpc_id

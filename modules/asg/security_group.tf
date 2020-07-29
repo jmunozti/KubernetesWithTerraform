@@ -12,21 +12,39 @@ resource "aws_security_group" "asg" {
   }
 }
 
-resource "aws_security_group_rule" "kubernetes" {
-  protocol          = "TCP"
-  from_port         = 6443
-  to_port           = 6443
-  type              = "ingress"
-  cidr_blocks       = var.allowed_hosts
-  security_group_id = aws_security_group.asg.id
-}
-
 resource "aws_security_group_rule" "ssh" {
   protocol          = "TCP"
   from_port         = 22
   to_port           = 22
   type              = "ingress"
   cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.asg.id
+}
+
+resource "aws_security_group_rule" "kubelet_health_check" {
+  protocol          = "TCP"
+  from_port         = 10250
+  to_port           = 10250
+  type              = "ingress"
+  cidr_blocks       = var.allowed_hosts
+  security_group_id = aws_security_group.asg.id
+}
+
+resource "aws_security_group_rule" "external_applications" {
+  protocol          = "TCP"
+  from_port         = 30000
+  to_port           = 32767
+  type              = "ingress"
+  cidr_blocks       = var.allowed_hosts
+  security_group_id = aws_security_group.asg.id
+}
+
+resource "aws_security_group_rule" "kubelet_api" {
+  protocol          = "TCP"
+  from_port         = 10255
+  to_port           = 10255
+  type              = "ingress"
+  cidr_blocks       = var.allowed_hosts
   security_group_id = aws_security_group.asg.id
 }
 

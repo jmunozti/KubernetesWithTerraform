@@ -24,7 +24,10 @@ RUN apt update && \
     apt install zip -y && \
     apt install graphviz -y && \
     apt install curl -y && \
+    apt install ssh -y && \
+    apt-get install jq -y && \
     apt install -y nano && \
+    apt install -y awscli && \
     wget https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip && \
     unzip terraform*.zip && \
     rm terraform*.zip && \
@@ -34,6 +37,7 @@ RUN apt update && \
     mkdir /devops/terraform && \
     mkdir /devops/docs && \
     mkdir /devops/app && \
+    mkdir /devops/keyPair && \
     mkdir /devops/mychart && \
     mkdir /devops/shell_script && \
     curl -Lo /devops/terraform-docs https://github.com/terraform-docs/terraform-docs/releases/download/v0.10.0-rc.1/terraform-docs-v0.10.0-rc.1-$(uname | tr '[:upper:]' '[:lower:]')-amd64 && \
@@ -43,10 +47,11 @@ RUN apt update && \
 WORKDIR /devops/terraform
 COPY modules /devops/modules
 COPY terraform /devops/terraform
-COPY terraform/run_terraform.sh /devops/terraform
+COPY terraform/run.sh /devops/terraform
 COPY app /devops/app
 COPY mychart /devops/mychart
 COPY shell_script /devops/shell_script
+COPY keyPair /devops/keyPair
 
 # Define default command.
 CMD ["bash"]
