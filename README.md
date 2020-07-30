@@ -19,7 +19,7 @@ https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec
 
 1.- Save the private key created in requirement 2 inside the keyPair folder. Must be called keyPair.pem
 
-2.- Go to the terraform folder ad run this command:
+2.- Run this command:
 
 docker build \
 -t kubernetes-with-terraform \
